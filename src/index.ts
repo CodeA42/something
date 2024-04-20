@@ -1,16 +1,15 @@
 import { colorfullSquares } from "./drawings/colorful-squares/colorfull-squares";
+import { ImageRendering } from "./drawings/colorful-squares/types";
 import { Canvas, Canvases } from "./elements/canvas";
 
 async function main() {
   const canvas = Canvas.getInstance(Canvases.drawingBoard);
 
-  canvas.drawRectangle(
-    0,
-    0,
-    canvas.HTMLElement.width,
-    canvas.HTMLElement.height
-  );
-  colorfullSquares(canvas, { delay: false });
+  colorfullSquares(canvas, {
+    delay: false,
+    canvasOptions: { imageRendering: ImageRendering.pixelated },
+    subdivisions: 500,
+  });
 }
 
 main();
