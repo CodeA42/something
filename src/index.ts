@@ -1,5 +1,5 @@
-import { Canvas } from "./elements/canvas";
+import { Canvas, Canvases } from "./elements/canvas";
 
-const canvas = Canvas.getInstance();
+const canvas = Canvas.getInstance(Canvases.drawingBoard);
 
-canvas.drawRectangle(0, 0, 10, 10);
+canvas.drawRectangle(0, 0, canvas.HTMLElement.width, canvas.HTMLElement.height);

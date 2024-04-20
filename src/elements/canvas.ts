@@ -1,30 +1,32 @@
-import { ElementNotFoundError } from "./element-not-found";
+import { CanvasNotFoundError } from "./canvas-not-found";
+
+export enum Canvases {
+  drawingBoard = "drawing-board",
+}
 
 export class Canvas {
-  private static instance: Canvas;
+  private static instances: { [x: string]: Canvas } = {};
   public HTMLElement: HTMLCanvasElement;
-  static id = "drawing-board";
-  static selector = `#${this.id}`;
 
   protected constructor(element: HTMLCanvasElement) {
     this.HTMLElement = element;
   }
 
-  public static getInstance(): Canvas {
-    if (!Canvas.instance) {
-      const element = document.querySelector<HTMLCanvasElement>(this.selector);
+  public static getInstance(id: string): Canvas {
+    if (!Canvas.instances[id]) {
+      const element = document.querySelector<HTMLCanvasElement>(`#${id}`);
       if (!element) {
-        throw new ElementNotFoundError(`Element "${this.selector}" not found`);
+        throw new CanvasNotFoundError(`Canvas with id "${id}" not found`);
       }
-      Canvas.instance = new Canvas(element);
+      Canvas.instances[id] = new Canvas(element);
     }
 
-    return Canvas.instance;
+    return Canvas.instances[id];
   }
 
-  public drawRectangle(x: number, y: number, a: number, b: number) {
+  public drawRectangle(x: number, y: number, width: number, height: number) {
     const context = this.HTMLElement.getContext("2d");
 
-    context?.fillRect(x, y, a, b);
+    context?.fillRect(x, y, width, height);
   }
 }
