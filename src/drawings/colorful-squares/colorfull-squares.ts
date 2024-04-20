@@ -4,9 +4,8 @@ import {
   PartialColorfulSquaresOptions,
   ColorfulSquaresOptions,
   colorfulSquaresOptionsSchema,
+  ColorScheme,
 } from "./types";
-
-export async function colorfullSquaresLoop(canvas: Canvas) {}
 
 export async function colorfullSquares(
   canvas: Canvas,
@@ -50,27 +49,52 @@ export async function colorfullSquares(
 
     const subdivisions = options.subdivisions;
 
-    const pw = w / subdivisions;
-    const ph = h / subdivisions;
+    const pw = Math.ceil(w / subdivisions);
+    const ph = Math.ceil(h / subdivisions);
 
-    for (let i = 0; i <= subdivisions; i++) {
-      for (let j = 0; j <= subdivisions; j++) {
+    for (let x = 0; x <= subdivisions; x++) {
+      for (let y = 0; y <= subdivisions; y++) {
         const context = canvas.HTMLElement.getContext("2d");
-        if (
-          options.loopOptions?.pixelRenderDelayMilliseconds &&
-          !isFirstRender
-        ) {
-          await sleep(1);
+        if (options.loopOptions && !isFirstRender) {
+          if (options.loopOptions?.pixelRenderDelayMilliseconds) {
+            await sleep(options.loopOptions?.pixelRenderDelayMilliseconds);
+          } else {
+            await sleep(1);
+          }
         }
 
         if (context) {
-          context.fillStyle = `rgb(
-            ${Math.random() * 255}
-            ${Math.random() * 255}
-            ${Math.random() * 255})`;
+          context.fillStyle = generateColor(canvas, options, pw * x, ph * y);
         }
-        canvas.drawRectangle(pw * i, ph * j, pw, ph);
+        canvas.drawRectangle(pw * x, ph * y, pw, ph);
       }
     }
   }
+}
+
+function generateColor(
+  canvas: Canvas,
+  options: ColorfulSquaresOptions,
+  x: number,
+  y: number
+) {
+  if (options.colorScheme == ColorScheme.gradient) {
+    return generateGradientColor(canvas, x, y);
+  }
+  return generateRandomColor();
+}
+
+function generateGradientColor(canvas: Canvas, x: number, y: number): string {
+  const red = (255 * x) / canvas.HTMLElement.width;
+  const green = (255 * y) / canvas.HTMLElement.height;
+  const blue = 0;
+
+  return `rgb(${red},${green},${blue})`;
+}
+
+function generateRandomColor(): string {
+  return `rgb(
+    ${Math.random() * 255}
+    ${Math.random() * 255}
+    ${Math.random() * 255})`;
 }

@@ -13,11 +13,15 @@ export const canvasOptionsSchema = z.object({
 });
 
 const loopOptionsSchema = z.object({
-  loopTimes: z.number().min(1).default(10),
   startRenderLoopEveryMilliseconds: z.number().min(1).default(1000),
   pixelRenderDelayMilliseconds: z.number().min(1).default(1),
   renderWholeSceneFirstTime: z.boolean().default(true),
 });
+
+export enum ColorScheme {
+  gradient,
+  random,
+}
 
 export const colorfulSquaresOptionsSchema = z.object({
   delay: z.boolean().default(true),
@@ -25,6 +29,7 @@ export const colorfulSquaresOptionsSchema = z.object({
   subdivisions: z.number().default(100),
   canvasOptions: canvasOptionsSchema.optional(),
   loopOptions: loopOptionsSchema.optional(),
+  colorScheme: z.nativeEnum(ColorScheme).default(ColorScheme.random),
 });
 
 export type ColorfulSquaresOptions = z.infer<

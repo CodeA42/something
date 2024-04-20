@@ -1,5 +1,5 @@
 import { colorfullSquares } from "./drawings/colorful-squares/colorfull-squares";
-import { ImageRendering } from "./drawings/colorful-squares/types";
+import { ColorScheme, ImageRendering } from "./drawings/colorful-squares/types";
 import { Canvas, Canvases } from "./elements/canvas";
 
 async function main() {
@@ -8,7 +8,8 @@ async function main() {
   colorfullSquares(canvas, {
     delay: false,
     canvasOptions: { imageRendering: ImageRendering.pixelated },
-    subdivisions: 500,
+    subdivisions: 1000,
+    colorScheme: ColorScheme.gradient,
   });
 }
 
