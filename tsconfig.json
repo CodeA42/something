@@ -2,10 +2,13 @@
   "compilerOptions": {
     "outDir": "./build",
     "module": "commonjs",
+    "lib": ["es5", "es6", "DOM"],
     "noImplicitAny": true,
+    "strict": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "rootDir": "src"
   },
   "include": ["src/**/*.ts"]
 }
