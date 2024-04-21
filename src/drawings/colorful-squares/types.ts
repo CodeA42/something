@@ -18,8 +18,9 @@ const loopOptionsSchema = z.object({
   renderWholeSceneFirstTime: z.boolean().default(true),
 });
 
-export enum ColorScheme {
-  gradient,
+export enum ColorSchema {
+  gradientRandom,
+  gradiendGreenBlue,
   random,
 }
 
@@ -29,7 +30,7 @@ export const colorfulSquaresOptionsSchema = z.object({
   subdivisions: z.number().default(100),
   canvasOptions: canvasOptionsSchema.optional(),
   loopOptions: loopOptionsSchema.optional(),
-  colorScheme: z.nativeEnum(ColorScheme).default(ColorScheme.random),
+  colorScheme: z.nativeEnum(ColorSchema).default(ColorSchema.random),
 });
 
 export type ColorfulSquaresOptions = z.infer<

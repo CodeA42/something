@@ -1,7 +1,8 @@
 import { CanvasNotFoundError } from "./canvas-not-found";
 
 export enum Canvases {
-  drawingBoard = "drawing-board",
+  backgroundBoard = "background-board",
+  trees = "trees",
 }
 
 export class Canvas {
@@ -14,10 +15,15 @@ export class Canvas {
 
   public static getInstance(id: string): Canvas {
     if (!Canvas.instances[id]) {
-      const element = document.querySelector<HTMLCanvasElement>(`#${id}`);
+      let element = document.querySelector<HTMLCanvasElement>(`#${id}`);
+
       if (!element) {
-        throw new CanvasNotFoundError(`Canvas with id "${id}" not found`);
+        element = document.createElement("canvas");
+        element.id = id;
+        element.style.width = "100%";
+        element.style.height = "100%";
       }
+
       Canvas.instances[id] = new Canvas(element);
     }
 
