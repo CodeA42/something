@@ -1,4 +1,5 @@
 import { Canvas } from "../../elements/canvas";
+import { getRandomNumber } from "../../utils/get-random-number";
 import { sleep } from "../../utils/sleep";
 import {
   PartialColorfulSquaresOptions,
@@ -6,6 +7,14 @@ import {
   colorfulSquaresOptionsSchema,
   ColorScheme,
 } from "./types";
+
+type ColorModifier = ((x: number, y: number) => number) | undefined;
+
+type ColorModifiers = {
+  red: ColorModifier;
+  green: ColorModifier;
+  blue: ColorModifier;
+};
 
 export async function colorfullSquares(
   canvas: Canvas,
@@ -44,6 +53,15 @@ export async function colorfullSquares(
     options: ColorfulSquaresOptions,
     isFirstRender: boolean
   ) {
+    let redModifier: ColorModifier;
+    let greenModifier: ColorModifier;
+    let blueModifier: ColorModifier;
+    const colorModifiers: ColorModifiers = {
+      red: redModifier,
+      green: greenModifier,
+      blue: blueModifier,
+    };
+
     const w = canvas.HTMLElement.width;
     const h = canvas.HTMLElement.height;
 
@@ -64,7 +82,13 @@ export async function colorfullSquares(
         }
 
         if (context) {
-          context.fillStyle = generateColor(canvas, options, pw * x, ph * y);
+          context.fillStyle = generateColor(
+            canvas,
+            options,
+            pw * x,
+            ph * y,
+            colorModifiers
+          );
         }
         canvas.drawRectangle(pw * x, ph * y, pw, ph);
       }
@@ -76,20 +100,58 @@ function generateColor(
   canvas: Canvas,
   options: ColorfulSquaresOptions,
   x: number,
-  y: number
+  y: number,
+  colorModifiers: ColorModifiers
 ) {
   if (options.colorScheme == ColorScheme.gradient) {
-    return generateGradientColor(canvas, x, y);
+    return generateGradientColor(canvas, x, y, colorModifiers);
   }
   return generateRandomColor();
 }
 
-function generateGradientColor(canvas: Canvas, x: number, y: number): string {
-  const red = (255 * x) / canvas.HTMLElement.width;
-  const green = (255 * y) / canvas.HTMLElement.height;
-  const blue = 0;
+function generateGradientColor(
+  canvas: Canvas,
+  x: number,
+  y: number,
+  colorModifiers: ColorModifiers
+): string {
+  if (colorModifiers.red && colorModifiers.green && colorModifiers.blue) {
+    const red = colorModifiers.red(x, y);
+    const green = colorModifiers.green(x, y);
+    const blue = colorModifiers.blue(x, y);
+    return `rgb(${red},${green},${blue})`;
+  } else {
+    const getRandomModifier = () =>
+      modifierFactory(canvas, getRandomNumber(100));
 
-  return `rgb(${red},${green},${blue})`;
+    colorModifiers.red = getRandomModifier();
+    colorModifiers.green = getRandomModifier();
+    colorModifiers.blue = getRandomModifier();
+
+    const red = colorModifiers.red(x, y);
+    const green = colorModifiers.green(x, y);
+    const blue = colorModifiers.blue(x, y);
+
+    return `rgb(${red},${green},${blue})`;
+  }
+}
+
+function modifierFactory(canvas: Canvas, relevanAxis: number) {
+  const xAxis = canvas.HTMLElement.width;
+  const yAxis = canvas.HTMLElement.height;
+  const axisModifier = (point: number, axis: number) => (255 * point) / axis;
+  const randomModifier = () => getRandomNumber(255);
+  return (x: number, y: number) => {
+    if (relevanAxis > 0 && relevanAxis < 14) {
+      return randomModifier();
+    } else if (relevanAxis >= 14 && relevanAxis < 52) {
+      return axisModifier(x, xAxis);
+    } else if (relevanAxis >= 52 && relevanAxis < 90) {
+      return axisModifier(y, yAxis);
+    } else {
+      return 0;
+    }
+  };
 }
 
 function generateRandomColor(): string {
