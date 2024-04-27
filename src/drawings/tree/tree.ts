@@ -1,14 +1,8 @@
-import { z } from "zod";
+import { RGB, RGBA } from "../../libs/schemas";
 import { Canvas } from "../../elements/canvas";
-import { ColorSchema, ImageRendering } from "../colorful-squares/types";
-import {
-  PartialTreeOptions,
-  RGB,
-  RGBA,
-  colors,
-  rgbSchema,
-  treeOptionsSchema,
-} from "./types";
+import { ColorSchema } from "../colorful-squares/types";
+import { PartialTreeOptions, colors, treeOptionsSchema } from "./types";
+import { ImageRendering } from "../../libs/mdn-types/canvas";
 
 export async function tree(
   canvas: Canvas,
@@ -24,6 +18,8 @@ export async function tree(
 
   const options = validationResult.data;
 
+  canvas.HTMLElement.width = window.innerWidth;
+  canvas.HTMLElement.height = window.innerHeight;
   const x = canvas.HTMLElement.width;
   const y = canvas.HTMLElement.height;
 
@@ -35,9 +31,10 @@ export async function tree(
     context.beginPath();
     context.strokeStyle = rgba({ red: 0, green: 0, blue: 0, alpha: 1 });
     context.fillStyle = rgb(colors.red);
-    context.moveTo(x / 2 + 0.5, y);
-    context.lineTo(x / 2 + 0.5, 0);
+    context.moveTo(x / 2 + 0.5, y + 0.5);
+    context.lineTo(x / 2 + 0.5, 0.5);
     context.lineTo(x, y / 2);
+    context.lineTo(x / 2 + 0.5, y + 0.5);
     context.stroke();
   }
 

@@ -8,7 +8,13 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@ecs": ["./src/libs/ecs/index.ts"],
+      "@utils": ["./src/libs/utils/index.ts"],
+      "@schemas": ["./src/libs/schemas/index.ts"],
+      "@mdn-types/canvas": ["./src/libs/mdn-types/canvas/index.ts"]
+    }
   },
   "include": ["src/**/*.ts"]
 }

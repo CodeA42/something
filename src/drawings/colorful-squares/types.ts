@@ -1,12 +1,5 @@
+import { ImageRendering } from "../../libs/mdn-types/canvas";
 import { z } from "zod";
-
-export enum ImageRendering {
-  auto = "auto",
-  smooth = "smooth",
-  highQuality = "high-quality",
-  crispEdges = "crisp-edges",
-  pixelated = "pixelated",
-}
 
 export const canvasOptionsSchema = z.object({
   imageRendering: z.nativeEnum(ImageRendering).optional(),
@@ -28,6 +21,7 @@ export const colorfulSquaresOptionsSchema = z.object({
   delay: z.boolean().default(true),
   randomDelay: z.boolean().default(false),
   subdivisions: z.number().default(100),
+  subdivideFullResolution: z.boolean().default(false),
   canvasOptions: canvasOptionsSchema.optional(),
   loopOptions: loopOptionsSchema.optional(),
   colorScheme: z.nativeEnum(ColorSchema).default(ColorSchema.random),

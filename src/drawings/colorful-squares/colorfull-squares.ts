@@ -1,6 +1,6 @@
 import { Canvas } from "../../elements/canvas";
-import { getRandomNumber } from "../../utils/get-random-number";
-import { sleep } from "../../utils/sleep";
+import { getRandomNumber } from "../../libs/utils/get-random-number";
+import { sleep } from "../../libs/utils/sleep";
 import {
   PartialColorfulSquaresOptions,
   ColorfulSquaresOptions,
@@ -62,16 +62,36 @@ export async function colorfullSquares(
       blue: blueModifier,
     };
 
+    canvas.HTMLElement.width = window.innerWidth;
+    canvas.HTMLElement.height = window.innerHeight;
+
     const w = canvas.HTMLElement.width;
     const h = canvas.HTMLElement.height;
 
-    const subdivisions = options.subdivisions;
+    const { subdivisionsX, subdivisionsY } = getSubdivisions(canvas, options);
 
-    const pw = Math.ceil(w / subdivisions);
-    const ph = Math.ceil(h / subdivisions);
+    function getSubdivisions(
+      canvas: Canvas,
+      options: ColorfulSquaresOptions
+    ): { subdivisionsX: number; subdivisionsY: number } {
+      if (options.subdivideFullResolution) {
+        return {
+          subdivisionsX: canvas.HTMLElement.width,
+          subdivisionsY: canvas.HTMLElement.height,
+        };
+      } else {
+        return {
+          subdivisionsX: options.subdivisions,
+          subdivisionsY: options.subdivisions,
+        };
+      }
+    }
 
-    for (let x = 0; x <= subdivisions; x++) {
-      for (let y = 0; y <= subdivisions; y++) {
+    const pw = Math.ceil(w / subdivisionsX);
+    const ph = Math.ceil(h / subdivisionsY);
+
+    for (let x = 0; x <= subdivisionsX; x++) {
+      for (let y = 0; y <= subdivisionsY; y++) {
         const context = canvas.HTMLElement.getContext("2d");
         if (options.loopOptions && !isFirstRender) {
           if (options.loopOptions?.pixelRenderDelayMilliseconds) {

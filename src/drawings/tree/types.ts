@@ -1,19 +1,6 @@
 import { z } from "zod";
-import { isWholeNumber } from "../../utils/validation/is-whole-number";
-
-export const rgbSchema = z.object({
-  red: z.number().min(0).max(255).refine(isWholeNumber),
-  green: z.number().min(0).max(255).refine(isWholeNumber),
-  blue: z.number().min(0).max(255).refine(isWholeNumber),
-});
-
-export type RGB = z.infer<typeof rgbSchema>;
-
-export const rgbaSchema = rgbSchema.extend({
-  alpha: z.number().min(0).max(1),
-});
-
-export type RGBA = z.infer<typeof rgbaSchema>;
+import { vectorSchema } from "../../libs/schemas/vector";
+import { rgbSchema } from "../../libs/schemas/color";
 
 export const pointSchema = z.object({
   x: z.number(),
@@ -21,13 +8,6 @@ export const pointSchema = z.object({
 });
 
 export type Point = z.infer<typeof pointSchema>;
-
-export const vectorSchema = z.object({
-  a: z.number(),
-  b: z.number(),
-});
-
-export type Vector = z.infer<typeof vectorSchema>;
 
 export const treeOptionsSchema = z.object({
   trunkColor: rgbSchema.default({ red: 255, green: 255, blue: 255 }),

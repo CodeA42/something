@@ -1,5 +1,6 @@
+import { ImageRendering } from "./libs/mdn-types/canvas";
 import { colorfullSquares } from "./drawings/colorful-squares/colorfull-squares";
-import { ColorSchema, ImageRendering } from "./drawings/colorful-squares/types";
+import { ColorSchema } from "./drawings/colorful-squares/types";
 import { tree } from "./drawings/tree/tree";
 import { Canvas, Canvases } from "./elements/canvas";
 
@@ -9,13 +10,13 @@ async function main() {
   await colorfullSquares(canvas, {
     delay: false,
     canvasOptions: { imageRendering: ImageRendering.crispEdges },
-    subdivisions: 1000,
-    colorScheme: ColorSchema.gradiendGreenBlue,
+    subdivideFullResolution: true,
+    colorScheme: ColorSchema.gradientRandom,
   });
 
-  // const treeCanvas = Canvas.getInstance(Canvases.trees);
+  const treeCanvas = Canvas.getInstance(Canvases.trees);
 
-  // await tree(treeCanvas, { trunkColor: { red: 255, green: 0, blue: 0 } });
+  await tree(treeCanvas, { trunkColor: { red: 255, green: 0, blue: 0 } });
 }
 
 main();
