@@ -13,7 +13,8 @@
       "@ecs": ["./src/libs/ecs/index.ts"],
       "@utils": ["./src/libs/utils/index.ts"],
       "@schemas": ["./src/libs/schemas/index.ts"],
-      "@mdn-types/canvas": ["./src/libs/mdn-types/canvas/index.ts"]
+      "@mdn-types/canvas": ["./src/libs/mdn-types/canvas/index.ts"],
+      "@crypto": ["./src/libs/crypto/index.ts"]
     }
   },
   "include": ["src/**/*.ts"]
